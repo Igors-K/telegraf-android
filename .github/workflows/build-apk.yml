@@ -1,0 +1,47 @@
+name: Build TELEGRAF APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-debug-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle 8.10.2
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+
+      - name: Unpack source
+        run: unzip -q telegraf-android-source-0.1.0.zip -d source
+
+      - name: Assemble debug APK
+        working-directory: source/telegraf-android
+        run: gradle :app:assembleDebug --no-daemon --stacktrace
+
+      - name: Verify APK
+        working-directory: source/telegraf-android
+        run: |
+          test -s app/build/outputs/apk/debug/app-debug.apk
+          unzip -t app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Publish TELEGRAF.apk
+        uses: actions/upload-artifact@v4
+        with:
+          name: TELEGRAF.apk
+          path: source/telegraf-android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
