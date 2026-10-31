@@ -27,7 +27,7 @@ jobs:
           gradle-version: '8.10.2'
 
       - name: Unpack source
-        run: unzip -q telegraf-android-source-0.1.0.zip -d source
+        run: unzip -q telegraf-android-source-0.1.2-fixed.zip -d source
 
       - name: Assemble debug APK
         working-directory: source/telegraf-android
