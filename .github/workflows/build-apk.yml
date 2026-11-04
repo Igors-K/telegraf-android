@@ -27,7 +27,7 @@ jobs:
           gradle-version: '8.10.2'
 
       - name: Unpack source
-        run: unzip -q TELEGRAF-Android-0.4.0-WebView-GitHub.zip -d source
+        run: unzip -q TELEGRAF-Android-0.4.0-GitHub.zip -d source
       - name: Assemble debug APK
         working-directory: source/telegraf-android
         run: gradle :app:assembleDebug --no-daemon --stacktrace
